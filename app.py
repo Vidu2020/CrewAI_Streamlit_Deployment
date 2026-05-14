@@ -1,6 +1,7 @@
 import os
 import sys
 
+# SQLite workaround for Streamlit Cloud deployment
 try:
     import pysqlite3  # type: ignore
     sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
@@ -15,11 +16,16 @@ st.set_page_config(page_title="CrewAI Streamlit Deployment", page_icon="🤖", l
 st.title("CrewAI + Streamlit Demo")
 st.write("A simple CrewAI app deployed with Streamlit.")
 
-api_key = st.secrets.get("OPENAI_API_KEY", os.getenv("OPENAI_API_KEY", ""))
+# Ask user for API key in the sidebar and mask the input
+st.sidebar.header("Configuration")
+api_key = st.sidebar.text_input("Enter your OpenAI API Key", type="password")
 
 if not api_key:
-    st.error("OPENAI_API_KEY is missing. Add it in Streamlit secrets.")
+    st.info("Please enter your OpenAI API key in the sidebar to continue.")
     st.stop()
+
+# Set the environment variable so CrewAI can find it automatically
+os.environ["OPENAI_API_KEY"] = api_key
 
 topic = st.text_input("Enter a topic", value="Future of AI in healthcare")
 
