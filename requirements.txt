@@ -1,5 +1,7 @@
-streamlit
+# requirements.txt
+streamlit==1.45.1
 crewai
-chromadb
-pydantic<2.13
+chromadb<0.6.4
+pydantic<2.12
 pydantic-settings
+pysqlite3-binary~=0.5.2
